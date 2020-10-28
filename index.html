@@ -1,0 +1,224 @@
+<html>
+    <head>
+
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+        <style>
+            @media screen and (min-width: 0px)  and (max-width: 1024px){
+                
+                /*text{
+                    display: none;
+                }*/
+
+                #chart_div{
+                    
+                    width: 1800px;
+                    height: 400px;
+                    background-color: #CCC;
+                    overflow: auto;
+                }
+                svg{
+                    height: 100%;
+                }
+            }
+
+            @media screen and (min-width: 1024px)  {
+                #chart_div{
+                    width: 100%;
+                }
+            }
+        </style>
+
+    </head>
+    <body>
+        <div class="centrarCaja" id="activiti" style="width: 100%;" align="center">
+            default
+        </div>
+        <div align="center">
+            Progreso: <label id="progreso2"></label><br>
+            Fecha de Inicio: <label id="fecha_inicio2"></label><br>
+            Fecha de Fin: <label id="fecha_fin2"></label><br>
+            Tiempo: <label id="tiempo2"></label> días<br>
+        </div>
+        <br><br>
+        <div id="chart_div" style="width: 100%;"></div>
+
+        <!-- Modal -->
+        <div class="modal fade" id="modalDetalle" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel"></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    </div>
+                    <div class="modal-body">
+                        Progreso: <label id="progreso"></label><br>
+                        Fecha de Inicio: <label id="fecha_inicio"></label><br>
+                        Fecha de Fin: <label id="fecha_fin"></label><br>
+                        Tiempo: <label id="tiempo"></label> días<br>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                        <!--<button type="button" class="btn btn-primary">Save changes</button>-->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+        
+        
+    </body>
+    
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+        <script type="text/javascript">
+            
+            google.charts.load('current', {'packages':['gantt']});
+            google.charts.setOnLoadCallback(drawChart);
+            //drawChart();
+            function drawChart() {
+
+                var data = new google.visualization.DataTable();
+                data.addColumn('string', 'Task ID');
+                data.addColumn('string', 'Task Name');
+                data.addColumn('string', 'Resource');
+                data.addColumn('date', 'Start Date');
+                data.addColumn('date', 'End Date');
+                data.addColumn('number', 'Duration');
+                data.addColumn('number', 'Percent Complete');
+                data.addColumn('string', 'Dependencies');
+
+                data.addRows([
+                    ['2014Spring', 'Spring 2014', 'spring',        new Date(2014, 2, 22), new Date(2014, 5, 20), null, 100, null],
+                    ['2014Summer', 'Summer 2014', 'summer',        new Date(2014, 5, 21), new Date(2014, 8, 20), null, 100, null],
+                    ['2014Autumn', 'Autumn 2014', 'autumn',        new Date(2014, 8, 21), new Date(2014, 11, 20), null, 100, null],
+                    ['2014Winter', 'Winter 2014', 'winter',        new Date(2014, 11, 21), new Date(2015, 2, 21), null, 100, null],
+                    ['2015Spring', 'Spring 2015', 'spring',        new Date(2015, 2, 22), new Date(2015, 5, 20), null, 50, null],
+                    ['2015Summer', 'Summer 2015', 'summer',        new Date(2015, 5, 21), new Date(2015, 8, 20), null, 0, null],
+                    ['2015Autumn', 'Autumn 2015', 'autumn',        new Date(2015, 8, 21), new Date(2015, 11, 20), null, 0, null],
+                    ['2015Winter', 'Winter 2015', 'winter',        new Date(2015, 11, 21), new Date(2016, 2, 21), null, 0, null],
+                    ['Football', 'Football Season', 'sports',      new Date(2014, 8, 4), new Date(2015, 1, 1), null, 100, null],
+                    ['Baseball', 'Baseball Season', 'sports',      new Date(2015, 2, 31), new Date(2015, 9, 20), null, 14, null],
+                    ['Basketball', 'Basketball Season', 'sports',  new Date(2014, 9, 28), new Date(2015, 5, 20), null, 86, null],
+                    ['Hockey', 'Hockey Season', 'sports',          new Date(2014, 9, 8), new Date(2015, 5, 21), null, 89, null]
+                ]);
+
+                var chart = new google.visualization.Gantt(document.getElementById('chart_div'));
+
+                google.visualization.events.addListener(chart, 'select', selectHandler);
+                google.visualization.events.addListener(chart, 'ready', afterDraw);
+                
+                function selectHandler() {
+                    var selection = chart.getSelection();
+                    var message = '';
+                    for (var i = 0; i < selection.length; i++) {
+                        var item = selection[i];
+                        if (item.row != null && item.column != null) {
+                            var str = data.getFormattedValue(item.row, item.column);
+                            message += '{row:' + item.row + ',column:' + item.column + '} = ' + str + '\n';
+                            console.log(str)
+                            $('#activiti').text(str)
+                        } else if (item.row != null) {
+                            var str = data.getFormattedValue(item.row, 0);
+                            message += '{row:' + item.row + ', column:none}; value (col 0) = ' + str + '\n';
+                            console.log(str)
+                            $('#activiti').text(str)
+                        } else if (item.column != null) {
+                            var str = data.getFormattedValue(0, item.column);
+                            message += '{row:none, column:' + item.column + '}; value (row 0) = ' + str + '\n';
+                            console.log(str)
+                            $('#activiti').text(str)
+                        }
+                    }
+                    if (message == '') {
+                        message = 'nothing';
+                    }
+                    //alert('You selected ' + message);
+                    //console.log()
+                }
+                //agregamos las etiquetas
+                function afterDraw(){
+                    //console.log(data.fg)
+                    var tam = data.fg.length;
+                    //console.log(data)
+                    var toContainer = $('#chart_div > div > div');
+                    $( "#chart_div g:eq(5) rect" ).each( function(dtaa2) {
+                        //console.log(dtaa2 + 1)
+                        var str = data.fg[dtaa2].c[1].v;
+                        var porcentaje = data.fg[dtaa2].c[6].v;
+                        var start_date = data.fg[dtaa2].c[3].v;
+                        var end_date = data.fg[dtaa2].c[4].v;
+                        //showDetails(str)
+                        toContainer.append("<div style='top:" + 
+                                                $(this).attr('y') + "px; left: " + 
+                                                $(this).attr('x') + "px; width: " + 
+                                                $(this).attr('width') + "px; height: " + 
+                                                $(this).attr('height') + "px;text-align: center;position:absolute;line-height:2' onclick='return showDetails(\"" + str + "\",\"" + porcentaje + "\",\"" + start_date + "\",\"" + end_date + "\");'> " + str + " </div>");
+                    });
+                }
+                var options = {
+                    height: 400,
+                    gantt: {
+                        trackHeight: 30
+                    }
+                };
+                chart.draw(data, options);
+            }
+
+            //mostramos los detalles del sprint en el modal
+            function showDetails(str, porcentaje, start_date, end_date){
+                //console.log(str, porcentaje, start_date, end_date)
+                $('#exampleModalLabel').text('');
+                $('#activiti').text('');
+                $('#progreso').text('');
+                $('#fecha_inicio').text('');
+                $('#fecha_fin').text('');
+                $('#tiempo').text(''); 
+                $('#progreso2').text('');
+                $('#fecha_inicio2').text('');
+                $('#fecha_fin2').text('');
+                $('#tiempo2').text(''); 
+                
+                //console.log(start_date)
+                var myDate1 = new Date(start_date);
+                var myDate2 = new Date(end_date);
+                //alert(myDate1.toLocaleDateString());
+                //alert(myDate2.toLocaleDateString());
+                //alert(restaFechas(myDate2.toLocaleDateString(), myDate1.toLocaleDateString() ) )
+
+                $('#exampleModalLabel').text(str);
+                $('#activiti').text(str);
+                $('#progreso').text(porcentaje);
+                $('#fecha_inicio').text(myDate1.toLocaleDateString());
+                $('#fecha_fin').text(myDate2.toLocaleDateString());
+                $('#tiempo').text( Math.abs(restaFechas(myDate2.toLocaleDateString(), myDate1.toLocaleDateString() )) ); 
+
+                $('#progreso2').text(porcentaje);
+                $('#fecha_inicio2').text(myDate1.toLocaleDateString());
+                $('#fecha_fin2').text(myDate2.toLocaleDateString());
+                $('#tiempo2').text( Math.abs(restaFechas(myDate2.toLocaleDateString(), myDate1.toLocaleDateString() )) ); 
+
+                $('#modalDetalle').modal();
+                //console.log(str)
+            }
+
+            restaFechas = function(f1,f2){
+                var aFecha1 = f1.split('/');
+                var aFecha2 = f2.split('/');
+                var fFecha1 = Date.UTC(aFecha1[2],aFecha1[1]-1,aFecha1[0]);
+                var fFecha2 = Date.UTC(aFecha2[2],aFecha2[1]-1,aFecha2[0]);
+                var dif = fFecha2 - fFecha1;
+                var dias = Math.floor(dif / (1000 * 60 * 60 * 24));
+                return dias;
+            }
+        </script>
+</html>
